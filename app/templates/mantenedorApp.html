@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mantenedor de Aplicaciones</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+
+</head>
+<body>
+
+    <div>
+        <button>
+            <a href="/" style="color: white; text-decoration: none;" class="botonera">⬅️ Volver</a>
+        </button>
+    </div><br><br>
+    
+    <h1>Mantenedor de Aplicaciones</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Ruta o Código</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in apps %}
+            <tr data-id="{{ app[0] }}">
+                <form action="/mantenedorApp" method="post">
+                    <td>{{ app[0] }}</td>
+                    <td>
+                        <span class="text">{{ app[1] | upper }}</span>
+                        <input type="text" name="name" class="input editable" value="{{ app[1] }}" style="display:none;">
+                    </td>
+                    <td>
+                        <span class="text">{{ app[2] }}</span>
+                        <input type="text" name="route" class="input editable" value="{{ app[2] }}" style="display:none;">
+                    </td>
+                    <td>
+                        <span class="text">{{ "ACTIVO" if app[3] == 1 else "INACTIVO" }}</span>
+                        <select name="status" class="input editable" style="display:none;">
+                            <option value="1" {% if app[3] == 1 %}selected{% endif %}>ACTIVO</option>
+                            <option value="0" {% if app[3] == 0 %}selected{% endif %}>INACTIVO</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="hidden" name="id" value="{{ app[0] }}">
+                        <button type="button" class="button_action editar-btn">✏️ Editar</button>
+                        <button type="submit" name="action" value="actualizar" class="button_action guardar-btn" style="display:none;">💾 Guardar</button>
+                        <button type="submit" name="action" value="eliminar" class="button_action">🗑 Eliminar</button>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+
+    </table>
+
+    <hr>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".editar-btn").forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    const row = btn.closest("tr");
+                    row.querySelectorAll(".text").forEach(el => el.style.display = "none");
+                    row.querySelectorAll(".editable").forEach(el => el.style.display = "inline-block");
+                    btn.style.display = "none";
+                    row.querySelector(".guardar-btn").style.display = "inline-block";
+                });
+            });
+        });
+    </script>
+
+
+</body>
+</html>

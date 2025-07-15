@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Control remoto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <h1>Control remoto</h1>
+    <div class="botonera">
+        {% for app in apps %}
+            <button onclick="enviarComando('{{ app.route }}')">{{ app.name }}</button>
+        {% endfor %}
+    </div><br><br>
+
+    <h3>Administrador de aplicaciones</h3>
+    <div class="botonera">
+        <button>
+            <a href="/mantenedorApp" style="color: white; text-decoration: none;">⚙️ Config</a>
+        </button>
+    </div><br><br>
+
+
+    <script>
+        function enviarComando(ruta) {
+            const rutaCodificada = encodeURIComponent(ruta);
+            fetch(`/abrir/${rutaCodificada}`)
+                .then(response => response.json())
+                .then(data => console.log(data.mensaje))
+                .catch(error => console.error("Error:", error));
+        }
+    </script>
+
+
+
+</body>
+</html>
